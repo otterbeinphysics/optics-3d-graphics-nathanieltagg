@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Optics Assignment - your name here - </title>
+
+	<!-- Some libraries to help out: -->
+	<script type="text/javascript" src="libraries/math.min.js"></script>
+	<script type="text/javascript" src="libraries/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="njt-matrix.js"></script>
+	<!-- Some CSS stylings: -->
+	<link href="style.css" rel="stylesheet">
+
+
+	<!-- your code is in this file: -->
+	<script type="text/javascript" src="code.js"></script>
+</head>
+<body>
+
+	<!-- this describes the main view you will use, which is 800 pixels high, has a border window, and is the full width of the window: -->
+	 <canvas id="viewport"></canvas>
+
+	<!-- here is where you can put some controls -->
+	<!-- add things as you like to this.  -->
+	<!-- Feel free to add controls - you need to make sure you set the 'id' parameter so you can read the controls in your code. -->
+
+	Box size: <input id="boxsize" value="100" />
+
+	<br> <!-- line break -->
+
+	<label> Change it <input type="checkbox" id="changeit" /></label>
+
+	<br> <!-- line break -->
+
+	<span class="myclickable" id="ctl1">Click to do a thing</span>
+
+
+	<span class="myholdable"  id="ctl2">Hold to do something else</span>
+
+	<br> <!-- line break -->
+
+	t=<span id='time'></span><!--  show current frame time -->
+	<br> <!-- line break -->
+	<span id='fps'></span> FPS<!--  frames per second -->
+
+	<div id='output'>
+		stuff
+	<div><!--  in case you want to put some text on the screen -->
+
+
+
+</body>
+</html>

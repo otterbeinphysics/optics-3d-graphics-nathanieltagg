@@ -1,0 +1,42 @@
+/*This file controls how certain things look on the screen outside your viewport. You shouldn't need to mess with it.*/
+
+#viewport {
+	height: 800px;
+	border: 2px solid black;
+	margin:2px;
+}
+
+.myclickable {
+	cursor: pointer;
+	border-radius: 25px;
+	color: green;
+	border: 2px solid green;
+	padding: 15px 32px;
+	display: inline-block;
+	font-size: 16px;
+	font-family: sans-serif;
+		user-select:none;
+
+}
+
+.myclickable:hover {
+		background: #eeeeee;
+
+}
+
+.myholdable {
+	cursor: pointer;
+	border-radius: 25px;
+	color: white;
+	background-color: #008CBA;
+	padding: 15px 32px;
+	display: inline-block;
+	font-size: 16px;
+	font-family: sans-serif;
+	user-select:none;
+}
+
+.myholdable:hover {
+		background: #007BA9;
+
+}
