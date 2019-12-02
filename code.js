@@ -41,8 +41,8 @@ $(function(){
 	})
 
 	// The check box
-	gMyCheckbox = $("#changeit").val()
-	$("#changeit").change(function(){
+	gMyCheckbox = $("#checkbox1").is(":checked");
+	$("#checkbox1").change(function(){
 		gMyCheckbox = $(this).is(":checked");
 		console.log("checkbox is now",gMyCheckbox);
 	})
@@ -78,7 +78,7 @@ $(function(){
 	DummyExample();
 
 	// This draws once.
-	// AnimationFrame();
+	AnimationFrame();
 
 
 
@@ -123,30 +123,180 @@ function Draw()
 	Clear(); // Clear the viewport; code below.
 
 	// Note that in this projection, x is RIGHT, y is DOWN (not up!) 
-	DrawBox(50,50, gBoxSize);
+	// DrawBox(0,0, gBoxSize, -Math.PI/180*0.1*gT);
+	// DrawBox(0,0, gBoxSize, -Math.PI/180*(0.1*gT+180));
+
+	screen_distance = 400*gBoxSize/100;
+	eye_distance = 800*gBoxSize/100;
+
+	DrawCube(100);
+	if(gMyCheckbox) DrawBox(-100,-100,gBoxSize/2);
 }
+
 
 function Clear()
 {
 	// Clears the viewport.
 	ctx.fillStyle="white"; 
-	ctx.fillRect(0,0,gWidth,gHeight);
+	ctx.fillRect(-gWidth/2, -gHeight/2, gWidth, gHeight);  // from xy to deltax, deltay
 }
 
-function DrawBox(x,y,size)
+
+var screen_distance = 400;
+var eye_distance = 800;
+function Project(p)
+{
+
+  // return the  x-y coordinates for a 3-vector
+  var xy = vec2(0,0);
+  xy[0] = p.x()/(p.z()+eye_distance)*screen_distance;
+  xy[1] = p.y()/(p.z()+eye_distance)*screen_distance;
+  return xy;
+}
+
+function MoveTo3d(p)
+{
+	var x = p.x()/(p.z()+eye_distance)*screen_distance;
+  	var y = p.y()/(p.z()+eye_distance)*screen_distance;
+	ctx.moveTo(x,y);
+}
+function LineTo3d(p)
+{
+	var x = p.x()/(p.z()+eye_distance)*screen_distance;
+  	var y = p.y()/(p.z()+eye_distance)*screen_distance;
+	ctx.lineTo(x,y);
+}
+
+function DrawCube(a)
+{
+	ctx.strokeStyle = "black";
+	ctx.lineWidth = 2;
+
+	// a is the half-width of the cube
+	var p1 = vec3(-a,-a,-a);           
+	var p2 = vec3(-a,+a,-a);           
+	var p3 = vec3(+a,+a,-a);           
+	var p4 = vec3(+a,-a,-a);           
+	var p5 = vec3(-a,-a,+a);           
+	var p6 = vec3(-a,+a,+a);           
+	var p7 = vec3(+a,+a,+a);           
+	var p8 = vec3(+a,-a,+a);           
+	
+	ctx.beginPath();
+	MoveTo3d(p1);
+	LineTo3d(p2);
+	LineTo3d(p3);
+	LineTo3d(p4);
+	LineTo3d(p1);
+	MoveTo3d(p5);
+	LineTo3d(p6);
+	LineTo3d(p7);
+	LineTo3d(p8);
+	LineTo3d(p5);
+
+	MoveTo3d(p1); LineTo3d(p5);
+	MoveTo3d(p2); LineTo3d(p6);
+	MoveTo3d(p3); LineTo3d(p7);
+	MoveTo3d(p4); LineTo3d(p8);
+	ctx.stroke();
+
+	
+// 	ctx.beginPath();
+// 	  ctx.moveTo(xy1.x(),xy1.y());
+// 	  ctx.lineTo(xy2.x(),xy2.y());
+// 	  ctx.lineTo(xy3.x(),xy3.y());
+// 	  ctx.lineTo(xy4.x(),xy4.y());
+// 	  ctx.lineTo(xy1.x(),xy1.y());
+// 	  ctx.moveTo(xy5.x(),xy5.y());
+// 	  ctx.lineTo(xy6.x(),xy6.y());
+// 	  ctx.lineTo(xy7.x(),xy7.y());
+// 	  ctx.lineTo(xy8.x(),xy8.y());
+// 	  ctx.lineTo(xy5.x(),xy5.y());
+// // /
+// 	  ctx.moveTo(xy1.x(),xy1.y());
+// 	  ctx.lineTo(xy5.x(),xy5.y());
+// 	  ctx.moveTo(xy2.x(),xy2.y());
+// 	  ctx.lineTo(xy6.x(),xy6.y());
+// 	  ctx.moveTo(xy3.x(),xy3.y());
+// 	  ctx.lineTo(xy7.x(),xy7.y());
+// 	  ctx.moveTo(xy4.x(),xy4.y());
+// 	  ctx.lineTo(xy8.x(),xy8.y());
+
+// 	ctx.stroke();
+}
+
+
+function DrawBox(x,y,size,theta)
 {
 	// Sample code to show some simple draw commands in 2d
 	ctx.strokeStyle = "red";  
 	ctx.lineWidth = 2;  // thickish lines
 
-	ctx.beginPath();  // We want to draw a line.
-	ctx.moveTo(x,y);  // start at a corner
-	ctx.lineTo(x+size,y);  // draw a line to the second corner
-	ctx.lineTo(x+size,y+size);
-	ctx.lineTo(x,y+size);
-	ctx.lineTo(x,y);       // Draw a line back to the start corner
-	ctx.stroke(); // Draw the line
+	var x1 = x;
+	var y1 = y;
 
+	var x2 = x1+size;
+	var y2 = y1;
+
+	var x3 = x1+size;
+	var y3 = y1+size;
+
+	var x4 = x1;
+	var y4 = y1+size;
+
+	x1p = x1*Math.cos(theta) + y1*Math.sin(theta);
+	y1p =-x1*Math.sin(theta) + y1*Math.cos(theta);
+
+	x2p = x2*Math.cos(theta) + y2*Math.sin(theta);
+	y2p =-x2*Math.sin(theta) + y2*Math.cos(theta)
+
+	x3p = x3*Math.cos(theta) + y3*Math.sin(theta);
+	y3p =-x3*Math.sin(theta) + y3*Math.cos(theta);
+
+	x4p = x4*Math.cos(theta) + y4*Math.sin(theta);
+	y4p =-x4*Math.sin(theta) + y4*Math.cos(theta);
+
+	var rot = mat2([Math.cos(theta),Math.sin(theta)],[-Math.sin(theta),Math.cos(theta)]);
+	var p1 = vec2(x,y);
+	var p2 = vec2(x+size,y);
+	var p3 = vec2(x+size,y+size);
+	var p4 = vec2(x,y+size);
+
+	var p1r = rot.mult(p1);
+	var p2r = rot.mult(p2);
+	var p3r = rot.mult(p3);
+	var p4r = rot.mult(p4);
+
+	console.log("box",p1,p2,p3,p4);
+	ctx.beginPath();  // We want to draw a line.
+	ctx.moveTo(p1r.x(),p1r.y());  // start at a corner upper left hand cornner
+	ctx.lineTo(p2r.x(),p2r.y());  // draw a line to the right
+	ctx.lineTo(p3r.x(),p3r.y()); //  draw a line down
+	ctx.lineTo(p4r.x(),p4r.y()); // draw a line left
+	ctx.lineTo(p1r.x(),p1r.y());       // Draw a line up and back to the start corner
+	ctx.stroke(); // actually draw the line on the screen as a red line of thickness 2
+
+
+
+	// FIRST EXERCISE:
+	// Modify the coordinates above so that they are rotated by 15 degrees to draw the box
+	// ctx.beginPath();  // We want to draw a line.
+	// ctx.moveTo(x1p,y1p);  // start at a corner upper left hand cornner
+	// ctx.lineTo(x2p,y2p);  // draw a line to the right
+	// ctx.lineTo(x3p,y3p); //  draw a line down
+	// ctx.lineTo(x4p,y4p); // draw a line left
+	// ctx.lineTo(x1p,y1p);       // Draw a line up and back to the start corner
+	// ctx.stroke(); // actually draw the line on the screen as a red line of thickness 2
+
+	// ctx.beginPath();  // We want to draw a line.
+	// ctx.moveTo(x1,y1);  // start at a corner upper left hand cornner
+	// ctx.lineTo(x2,y2);  // draw a line to the right
+	// ctx.lineTo(x3,y3); //  draw a line down
+	// ctx.lineTo(x4,y4); // draw a line left
+	// ctx.lineTo(x1,y1);       // Draw a line up and back to the start corner
+	// ctx.stroke(); // actually draw the line on the screen as a red line of thickness 2
+
+	// This code fills the box green if ctl2 is being held down with the mouse.
 	ctx.fillStyle = "green";
 	if(gCtl2) ctx.fill();
 }
